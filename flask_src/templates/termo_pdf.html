@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Termo de Adoção Responsável — {{ animal.nome }}</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12pt;
+            color: #212529;
+            margin: 2cm 2.5cm;
+            line-height: 1.6;
+        }
+        .cabecalho {
+            text-align: center;
+            border-bottom: 2px solid #f28b00;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .cabecalho h1 { font-size: 16pt; color: #f28b00; margin: 0; }
+        .cabecalho h2 { font-size: 13pt; color: #1a1a2e; margin: .25rem 0 0; }
+        .cabecalho p  { font-size: 10pt; color: #666; margin: .25rem 0 0; }
+
+        h3 {
+            font-size: 12pt;
+            color: #1a1a2e;
+            border-left: 4px solid #f28b00;
+            padding-left: .5rem;
+            margin: 1.5rem 0 .75rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11pt;
+            margin-bottom: 1rem;
+        }
+        td { padding: .3rem .5rem; vertical-align: top; }
+        td:first-child { width: 40%; font-weight: bold; color: #495057; }
+        tr:nth-child(even) { background: #f8f9fa; }
+
+        .clausulas ol { padding-left: 1.2rem; }
+        .clausulas li { margin-bottom: .5rem; }
+
+        .assinaturas {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+        .assinatura-bloco { flex: 1; text-align: center; }
+        .linha-assinatura {
+            border-top: 1px solid #000;
+            margin-top: 3rem;
+            padding-top: .3rem;
+            font-size: 10pt;
+        }
+        .rodape {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 9pt;
+            color: #888;
+            border-top: 1px solid #ddd;
+            padding-top: .5rem;
+        }
+        .protocolo {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: .5rem 1rem;
+            font-size: 10pt;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho -->
+    <div class="cabecalho">
+        <h1>CAFOFE — Casa dos Focinhos Felizes!</h1>
+        <h2>Termo de Responsabilidade de Adoção</h2>
+        <p>contato@cafofe.org &nbsp;|&nbsp; (11) 9 8692-1947 &nbsp;|&nbsp; www.cafofe.org</p>
+    </div>
+
+    <div class="protocolo">
+        <strong>Protocolo:</strong> #{{ '%05d' % adocao.id_adocao }} &nbsp;&nbsp;
+        <strong>Data:</strong>
+        {{ adocao.data_interesse.strftime('%d/%m/%Y') if adocao.data_interesse else '—' }}
+    </div>
+
+    <!-- Dados do animal -->
+    <h3>Dados do Animal</h3>
+    <table>
+        <tr><td>Nome</td><td>{{ animal.nome }}</td></tr>
+        <tr><td>Espécie</td><td>{{ animal.especie }}</td></tr>
+        <tr><td>Porte</td><td>{{ animal.porte }}</td></tr>
+        <tr><td>Sexo</td><td>{{ animal.sexo }}</td></tr>
+        <tr><td>Idade aproximada</td><td>{{ animal.idade_legivel }}</td></tr>
+        {% if animal.codigo_chip %}
+        <tr><td>Código do chip</td><td>{{ animal.codigo_chip }}</td></tr>
+        {% endif %}
+    </table>
+
+    <!-- Dados do tutor -->
+    <h3>Dados do Adotante</h3>
+    <table>
+        <tr><td>Nome completo</td><td>{{ tutor.nome }}</td></tr>
+        <tr><td>CPF</td><td>{{ tutor.cpf_formatado }}</td></tr>
+        {% if tutor.rg %}<tr><td>RG</td><td>{{ tutor.rg }}</td></tr>{% endif %}
+        <tr><td>Telefone</td><td>{{ tutor.telefone }}</td></tr>
+        {% if tutor.email %}<tr><td>E-mail</td><td>{{ tutor.email }}</td></tr>{% endif %}
+        <tr><td>Endereço</td><td>{{ tutor.endereco_completo }}</td></tr>
+        <tr><td>Tipo de moradia</td><td>{{ tutor.tipo_moradia or '—' }}</td></tr>
+        <tr><td>Horas fora de casa/dia</td>
+            <td>{{ tutor.horas_fora_casa or '—' }}</td></tr>
+        <tr><td>Autoriza visitas da Cafofe</td>
+            <td>{{ tutor.autoriza_visita_ong }}</td></tr>
+    </table>
+
+    <!-- Cláusulas -->
+    <h3>Cláusulas e Condições</h3>
+    <div class="clausulas">
+        <ol>
+            <li>
+                O adotante declara ter <strong>mais de 21 anos</strong> e estar ciente
+                de todas as responsabilidades inerentes à adoção de um animal.
+            </li>
+            <li>
+                O adotante compromete-se a proporcionar ao animal
+                <strong>conforto, saúde e bem-estar</strong>, incluindo alimentação
+                adequada, cuidados veterinários e atenção afetiva.
+            </li>
+            <li>
+                A residência do adotante deve ser <strong>adaptada e segura</strong>
+                para o animal, evitando fugas ou acidentes.
+                Para gatos, a tela de proteção nas janelas é obrigatória.
+            </li>
+            <li>
+                O adotante compromete-se a <strong>não repassar ou abandonar</strong>
+                o animal sem antes entrar em contato com a Cafofe.
+            </li>
+            <li>
+                O adotante <strong>autoriza visitas periódicas</strong> de membros
+                da Cafofe para verificação do bem-estar do animal.
+            </li>
+            <li>
+                Em caso de descumprimento das cláusulas acima, a Cafofe reserva-se
+                o direito de <strong>resgatar o animal</strong>.
+            </li>
+        </ol>
+    </div>
+
+    <!-- Assinaturas -->
+    <div class="assinaturas">
+        <div class="assinatura-bloco">
+            <div class="linha-assinatura">
+                {{ tutor.nome }}<br>
+                CPF: {{ tutor.cpf_formatado }}<br>
+                Adotante
+            </div>
+        </div>
+        <div class="assinatura-bloco">
+            <div class="linha-assinatura">
+                CAFOFE — Casa dos Focinhos Felizes<br>
+                CNPJ: 67.784.880/0001-05<br>
+                Representante
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <div class="rodape">
+        Documento gerado pela plataforma PATATINO em
+        {{ adocao.data_interesse.strftime('%d/%m/%Y às %H:%M') if adocao.data_interesse else '—' }}.
+        &nbsp;|&nbsp; Protocolo #{{ '%05d' % adocao.id_adocao }}
+    </div>
+
+</body>
+</html>

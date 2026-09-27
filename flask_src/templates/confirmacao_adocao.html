@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Solicitação enviada!{% endblock %}
+
+{% block content %}
+<div class="bg-primary text-white p-3 mb-4">
+    <div class="container">
+        <h1>Solicitação enviada!</h1>
+    </div>
+</div>
+
+<div class="container mb-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="confirmacao-box" role="status" aria-live="polite">
+
+                <p style="font-size:3rem" aria-hidden="true">🐾</p>
+
+                <h2 class="h4">Obrigado, {{ adocao.nome_tutor }}!</h2>
+                <p class="text-muted">
+                    Sua solicitação para adotar
+                    <strong>{{ adocao.nome_animal }}</strong>
+                    foi recebida. A Cafofe entrará em contato em breve.
+                </p>
+
+                <div class="alert alert-success text-start">
+                    <ul class="mb-0">
+                        <li><strong>Protocolo:</strong> #{{ '%05d' % adocao.id_adocao }}</li>
+                        <li><strong>Animal:</strong> {{ adocao.nome_animal }}</li>
+                        <li>
+                            <strong>Data:</strong>
+                            {{ adocao.data_interesse.strftime('%d/%m/%Y às %H:%M')
+                               if adocao.data_interesse else '—' }}
+                        </li>
+                        <li><strong>Status:</strong> Em análise</li>
+                    </ul>
+                </div>
+
+                <div class="d-flex gap-2 justify-content-center mt-3 flex-wrap">
+                    <a href="{{ url_for('adocao.termo_pdf', id_adocao=adocao.id_adocao) }}"
+                       class="btn btn-primary"
+                       aria-label="Baixar termo de responsabilidade em PDF">
+                        Baixar Termo PDF
+                    </a>
+                    <a href="{{ url_for('animal.home') }}"
+                       class="btn btn-outline-secondary">
+                        Ver outros animais
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

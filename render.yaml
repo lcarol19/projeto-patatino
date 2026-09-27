@@ -1,0 +1,35 @@
+# render.yaml — Deploy automático no Render (gratuito)
+# Documentação: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: patatino-cafofe
+    runtime: python
+    rootDir: flask_src
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2
+    plan: free
+
+    envVars:
+      - key: APP_SECRET_KEY
+        generateValue: true          # Render gera automaticamente
+      - key: DB_HOST
+        sync: false                  # Preencher no painel do Render
+      - key: DB_PORT
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: SSL_CA
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: PYTHON_VERSION
+        value: "3.11.0"

@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% block title %}Adotar {{ animal.nome }}{% endblock %}
+
+{% block content %}
+<div class="bg-primary text-white p-3 mb-4">
+    <div class="container">
+        <h1>Quero adotar {{ animal.nome }}!</h1>
+    </div>
+</div>
+
+<div class="container mb-4">
+
+    <!-- Pré-requisitos -->
+    <div class="alert alert-warning mb-4" role="note">
+        <strong>Leia antes de prosseguir — Pré-requisitos:</strong>
+        <ul class="mb-0 mt-1">
+            <li>Ter mais de 21 anos</li>
+            <li>Residência adaptada para o animal</li>
+            <li>Para gatos: tela de proteção nas janelas</li>
+            <li>Condições de proporcionar conforto, saúde e bem-estar</li>
+            <li>Tempo para passeios e brincadeiras</li>
+            <li>Paciência no período de adaptação</li>
+        </ul>
+    </div>
+
+    <form method="post"
+          action="{{ url_for('adocao.adotar', id_animal=animal.id_animal) }}"
+          novalidate class="needs-validation"
+          aria-label="Formulário de solicitação de adoção">
+
+        <!-- Dados pessoais -->
+        <div class="card p-3 mb-3">
+            <h2 class="h5 mb-3">Seus dados</h2>
+            <div class="row g-3">
+
+                <div class="col-12">
+                    <label for="nome" class="form-label">Nome completo *</label>
+                    <input type="text" id="nome" name="nome"
+                           class="form-control" required aria-required="true">
+                    <div class="invalid-feedback">Nome obrigatório.</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="cpf" class="form-label">CPF *</label>
+                    <input type="text" id="cpf" name="cpf"
+                           class="form-control" required
+                           aria-required="true"
+                           placeholder="000.000.000-00"
+                           inputmode="numeric" maxlength="14"
+                           aria-describedby="cpf-hint">
+                    <div id="cpf-hint" class="form-text">
+                        A formatação é automática.
+                    </div>
+                    <div class="invalid-feedback">CPF inválido.</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="rg" class="form-label">RG</label>
+                    <input type="text" id="rg" name="rg"
+                           class="form-control" maxlength="12"
+                           placeholder="00.000.000-X">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="telefone" class="form-label">Telefone *</label>
+                    <input type="tel" id="telefone" name="telefone"
+                           class="form-control" required
+                           aria-required="true"
+                           placeholder="(11) 98765-4321"
+                           inputmode="numeric" maxlength="15">
+                    <div class="invalid-feedback">Telefone obrigatório.</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input type="email" id="email" name="email"
+                           class="form-control" placeholder="seu@email.com">
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Endereço -->
+        <div class="card p-3 mb-3">
+            <h2 class="h5 mb-3">Endereço</h2>
+            <div class="row g-3">
+
+                <div class="col-md-4">
+                    <label for="cep" class="form-label">CEP</label>
+                    <input type="text" id="cep" name="cep"
+                           class="form-control"
+                           placeholder="00000-000"
+                           inputmode="numeric" maxlength="9"
+                           aria-describedby="cep-feedback">
+                    <div id="cep-feedback" class="form-text" aria-live="polite">
+                        Digite o CEP para preenchimento automático.
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="endereco" class="form-label">Logradouro</label>
+                    <input type="text" id="endereco" name="endereco"
+                           class="form-control" placeholder="Rua, Av...">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="numero" class="form-label">Número</label>
+                    <input type="text" id="numero" name="numero"
+                           class="form-control">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="complemento" class="form-label">Complemento</label>
+                    <input type="text" id="complemento" name="complemento"
+                           class="form-control">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="bairro" class="form-label">Bairro</label>
+                    <input type="text" id="bairro" name="bairro"
+                           class="form-control">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="cidade" class="form-label">Cidade</label>
+                    <input type="text" id="cidade" name="cidade"
+                           class="form-control">
+                </div>
+
+                <div class="col-md-1">
+                    <label for="estado" class="form-label">UF</label>
+                    <input type="text" id="estado" name="estado"
+                           class="form-control" maxlength="2">
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Moradia -->
+        <div class="card p-3 mb-3">
+            <h2 class="h5 mb-3">Sua moradia</h2>
+            <div class="row g-3">
+
+                <div class="col-md-4">
+                    <label for="tipo_moradia" class="form-label">Tipo *</label>
+                    <select id="tipo_moradia" name="tipo_moradia"
+                            class="form-select" required aria-required="true">
+                        <option value="">Selecione...</option>
+                        <option value="Casa">Casa</option>
+                        <option value="Apartamento">Apartamento</option>
+                        <option value="Sítio">Sítio</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                    <div class="invalid-feedback">Selecione o tipo.</div>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="horas_fora_casa" class="form-label">Horas fora/dia</label>
+                    <input type="number" id="horas_fora_casa" name="horas_fora_casa"
+                           class="form-control" min="0" max="24" step="0.5">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="casa_telada" class="form-label">Casa/janelas teladas?</label>
+                    <select id="casa_telada" name="casa_telada" class="form-select">
+                        <option value="Não se aplica">Não se aplica</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="acesso_quintal" class="form-label">Tem quintal?</label>
+                    <select id="acesso_quintal" name="acesso_quintal" class="form-select">
+                        <option value="Não se aplica">Não se aplica</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="acesso_rua" class="form-label">Animal terá acesso à rua?</label>
+                    <select id="acesso_rua" name="acesso_rua" class="form-select">
+                        <option value="Não se aplica">Não se aplica</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Autorizações -->
+        <div class="card p-3 mb-3">
+            <h2 class="h5 mb-3">Autorizações</h2>
+
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox"
+                       id="autoriza_visita_ong"
+                       name="autoriza_visita_ong"
+                       value="Sim" required
+                       aria-required="true"
+                       aria-describedby="visita-hint">
+                <label class="form-check-label fw-bold" for="autoriza_visita_ong">
+                    Autorizo visitas da Cafofe para verificar o bem-estar do animal *
+                </label>
+                <div id="visita-hint" class="form-text">
+                    Obrigatório para adoção responsável.
+                </div>
+                <div class="invalid-feedback">Autorização obrigatória.</div>
+            </div>
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox"
+                       id="autoriza_foto_mural"
+                       name="autoriza_foto_mural" value="Sim">
+                <label class="form-check-label" for="autoriza_foto_mural">
+                    Autorizo publicação de fotos nas redes sociais da Cafofe
+                </label>
+            </div>
+
+            <label for="observacoes" class="form-label">Mensagem (opcional)</label>
+            <textarea id="observacoes" name="observacoes"
+                      class="form-control" rows="3"
+                      placeholder="Conte um pouco sobre você..."></textarea>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Enviar solicitação</button>
+            <a href="{{ url_for('animal.detalhe', id_animal=animal.id_animal) }}"
+               class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/mascaras.js') }}"></script>
+<script>
+(function () {
+    document.querySelectorAll('.needs-validation').forEach(function (form) {
+        form.addEventListener('submit', function (e) {
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+                form.querySelector(':invalid').focus();
+            }
+            form.classList.add('was-validated');
+        });
+    });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block title %}Animais para Adoção{% endblock %}
+{% block content %}
+
+<h1 class="h3 mb-3">Animais disponíveis para adoção</h1>
+
+<form method="get" action="{{ url_for('animal.home') }}" class="row g-2 mb-4" role="search" aria-label="Filtrar animais">
+    <div class="col-6 col-md-2">
+        <label for="f-especie" class="form-label">Espécie</label>
+        <select id="f-especie" name="especie" class="form-select form-select-sm">
+            <option value="">Todas</option>
+            <option value="Cachorro" {% if especie=='Cachorro' %}selected{% endif %}>Cachorro</option>
+            <option value="Gato" {% if especie=='Gato' %}selected{% endif %}>Gato</option>
+            <option value="Outro" {% if especie=='Outro' %}selected{% endif %}>Outro</option>
+        </select>
+    </div>
+    <div class="col-6 col-md-2">
+        <label for="f-porte" class="form-label">Porte</label>
+        <select id="f-porte" name="porte" class="form-select form-select-sm">
+            <option value="">Todos</option>
+            <option value="Pequeno" {% if porte=='Pequeno' %}selected{% endif %}>Pequeno</option>
+            <option value="Médio" {% if porte=='Médio' %}selected{% endif %}>Médio</option>
+            <option value="Grande" {% if porte=='Grande' %}selected{% endif %}>Grande</option>
+        </select>
+    </div>
+    <div class="col-6 col-md-2">
+        <label for="f-sexo" class="form-label">Sexo</label>
+        <select id="f-sexo" name="sexo" class="form-select form-select-sm">
+            <option value="">Todos</option>
+            <option value="Macho" {% if sexo=='Macho' %}selected{% endif %}>Macho</option>
+            <option value="Fêmea" {% if sexo=='Fêmea' %}selected{% endif %}>Fêmea</option>
+        </select>
+    </div>
+    <div class="col-6 col-md-4">
+        <label for="f-busca" class="form-label">Buscar</label>
+        <input type="search" id="f-busca" name="q" class="form-control form-control-sm"
+               placeholder="Nome..." value="{{ busca }}">
+    </div>
+    <div class="col-12 col-md-2 d-flex align-items-end gap-1">
+        <button type="submit" class="btn btn-primary btn-sm w-100">Filtrar</button>
+        {% if especie or porte or sexo or busca %}
+        <a href="{{ url_for('animal.home') }}" class="btn btn-outline-secondary btn-sm" aria-label="Limpar filtros">X</a>
+        {% endif %}
+    </div>
+</form>
+
+<p class="text-muted small" aria-live="polite">{{ total }} encontrado{{ 's' if total != 1 else '' }}</p>
+
+{% if animais %}
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+    {% for animal in animais %}
+    <div class="col">
+        <article class="card h-100" aria-label="{{ animal.nome }}, {{ animal.especie }}">
+            {% if animal.foto_principal %}
+            <img src="{{ animal.foto_principal }}" class="card-img-top"
+                 alt="Foto de {{ animal.nome }}, {{ animal.especie }}">
+            {% else %}
+            <div class="sem-foto" role="img" aria-label="{{ animal.nome }} sem foto">
+                {% if animal.especie == 'Gato' %}🐱{% else %}🐶{% endif %}
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h3 class="card-title h6">{{ animal.nome }}</h3>
+                <p class="card-text small text-muted">{{ animal.especie }} · {{ animal.porte }}</p>
+                <span class="badge bg-success small">Disponível</span>
+            </div>
+            <div class="card-footer bg-transparent">
+                <a href="{{ url_for('animal.detalhe', id_animal=animal.id_animal) }}"
+                   class="btn btn-outline-primary btn-sm w-100"
+                   aria-label="Ver detalhes de {{ animal.nome }}">Ver detalhes</a>
+            </div>
+        </article>
+    </div>
+    {% endfor %}
+</div>
+
+{% if total_paginas > 1 %}
+<nav class="mt-4" aria-label="Páginas">
+    <ul class="pagination justify-content-center">
+        <li class="page-item {% if page==1 %}disabled{% endif %}">
+            <a class="page-link" href="{{ url_for('animal.home', page=page-1, q=busca, especie=especie, porte=porte, sexo=sexo) }}" aria-label="Anterior">«</a>
+        </li>
+        {% for p in range(1, total_paginas+1) %}
+        <li class="page-item {% if p==page %}active{% endif %}">
+            <a class="page-link" href="{{ url_for('animal.home', page=p, q=busca, especie=especie, porte=porte, sexo=sexo) }}" aria-label="Página {{ p }}" {% if p==page %}aria-current="page"{% endif %}>{{ p }}</a>
+        </li>
+        {% endfor %}
+        <li class="page-item {% if page==total_paginas %}disabled{% endif %}">
+            <a class="page-link" href="{{ url_for('animal.home', page=page+1, q=busca, especie=especie, porte=porte, sexo=sexo) }}" aria-label="Próxima">»</a>
+        </li>
+    </ul>
+</nav>
+{% endif %}
+
+{% else %}
+<div class="text-center py-5" role="status" aria-live="polite">
+    <p style="font-size:3rem">🐾</p>
+    <p>Nenhum animal encontrado. <a href="{{ url_for('animal.home') }}">Ver todos</a></p>
+</div>
+{% endif %}
+{% endblock %}

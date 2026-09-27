@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% block title %}{{ animal.nome }}{% endblock %}
+
+{% block content %}
+<div class="bg-primary text-white p-3 mb-4">
+    <div class="container">
+        <h1>{{ animal.nome }}</h1>
+        <nav aria-label="Caminho de navegação">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                    <a href="{{ url_for('animal.home') }}" style="color:#fff">Início</a>
+                </li>
+                <li class="breadcrumb-item active" style="color:#ffe0b2"
+                    aria-current="page">{{ animal.nome }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container mb-4">
+    <div class="row g-4">
+
+        <!-- Fotos: carrossel Bootstrap 5 -->
+        <div class="col-md-6">
+            {% if animal.fotos %}
+            <div id="carrossel" class="carousel slide"
+                 role="region"
+                 aria-label="Fotos de {{ animal.nome }}"
+                 aria-roledescription="carrossel">
+
+                <div class="carousel-inner border rounded">
+                    {% for foto in animal.fotos %}
+                    <div class="carousel-item {% if loop.first %}active{% endif %}">
+                        <img src="{{ foto.url_foto }}"
+                             class="d-block w-100"
+                             style="height:300px;object-fit:cover"
+                             alt="Foto {{ loop.index }} de {{ animal.nome }}"
+                             loading="{% if loop.first %}eager{% else %}lazy{% endif %}">
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {% if animal.fotos|length > 1 %}
+                <button class="carousel-control-prev" type="button"
+                        data-bs-target="#carrossel" data-bs-slide="prev"
+                        aria-label="Foto anterior">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                </button>
+                <button class="carousel-control-next" type="button"
+                        data-bs-target="#carrossel" data-bs-slide="next"
+                        aria-label="Próxima foto">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </button>
+                {% endif %}
+
+            </div>
+            {% else %}
+            <div class="sem-foto border rounded" style="height:300px;font-size:4rem"
+                 role="img" aria-label="{{ animal.nome }} sem foto">
+                {% if animal.especie == 'Gato' %}🐱{% else %}🐶{% endif %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Informações -->
+        <div class="col-md-6">
+            <div class="card p-3">
+
+                <div class="mb-3">
+                    <span class="badge-especie">{{ animal.especie }}</span>
+                    <span class="badge bg-secondary ms-1">{{ animal.porte }}</span>
+                    {% if animal.status == 'Para adoção' %}
+                    <span class="badge bg-success ms-1">Disponível</span>
+                    {% else %}
+                    <span class="badge bg-warning text-dark ms-1">{{ animal.status }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="info-linha"><strong>Sexo:</strong> {{ animal.sexo }}</div>
+                <div class="info-linha"><strong>Idade:</strong> {{ animal.idade_legivel }}</div>
+                {% if animal.codigo_chip %}
+                <div class="info-linha"><strong>Chip:</strong> {{ animal.codigo_chip }}</div>
+                {% endif %}
+                {% if animal.temperamento %}
+                <div class="info-linha"><strong>Temperamento:</strong> {{ animal.temperamento }}</div>
+                {% endif %}
+                {% if animal.descricao %}
+                <div class="info-linha mt-2">{{ animal.descricao }}</div>
+                {% endif %}
+                {% if animal.observacoes %}
+                <div class="alert alert-warning mt-2 py-2" role="note">
+                    <strong>Obs:</strong> {{ animal.observacoes }}
+                </div>
+                {% endif %}
+
+                <div class="d-flex gap-2 mt-3 flex-wrap">
+                    {% if animal.status == 'Para adoção' %}
+                    <a href="{{ url_for('adocao.adotar', id_animal=animal.id_animal) }}"
+                       class="btn btn-primary">
+                        Quero adotar!
+                    </a>
+                    {% endif %}
+                    <a href="{{ url_for('animal.editar', id_animal=animal.id_animal) }}"
+                       class="btn btn-outline-secondary">
+                        Editar
+                    </a>
+                    <button type="button"
+                            class="btn btn-outline-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalExcluir"
+                            aria-haspopup="dialog">
+                        Excluir
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Pré-requisitos -->
+    {% if animal.status == 'Para adoção' %}
+    <div class="mt-4">
+        <h2 class="h5 border-bottom pb-2">Pré-requisitos para adoção responsável</h2>
+        <ul>
+            <li>Ter mais de 21 anos</li>
+            <li>Residência adaptada — sem risco de fuga ou acidente</li>
+            <li>Para gatos: tela de proteção nas janelas é essencial</li>
+            <li>Ter condições de proporcionar conforto, saúde e bem-estar</li>
+            <li>Ter tempo para passeios e brincadeiras</li>
+            <li>Ser paciente no período de adaptação</li>
+        </ul>
+    </div>
+    {% endif %}
+
+</div>
+
+<!-- Modal de confirmação de exclusão
+     role="dialog" + aria-modal: informa leitores de tela que é um diálogo -->
+<div class="modal fade" id="modalExcluir" tabindex="-1"
+     role="dialog"
+     aria-labelledby="modalExcluirTitulo"
+     aria-modal="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title h6" id="modalExcluirTitulo">Confirmar exclusão</h3>
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                Excluir <strong>{{ animal.nome }}</strong>? Esta ação não pode ser desfeita.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Cancelar</button>
+                <form action="{{ url_for('animal.excluir', id_animal=animal.id_animal) }}"
+                      method="post">
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

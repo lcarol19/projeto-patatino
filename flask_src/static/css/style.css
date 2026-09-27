@@ -1,0 +1,66 @@
+/* =========================================
+   projeto-patatino — Bootstrap padrão
+   Mobile-first | WCAG 2.1 AA
+   ========================================= */
+
+/* Skip link — acessibilidade */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    background: #0d6efd;
+    color: #fff;
+    padding: 8px 16px;
+    font-weight: bold;
+    z-index: 9999;
+    text-decoration: none;
+}
+.skip-link:focus { top: 0; }
+
+/* Foco visível — acessibilidade */
+:focus-visible {
+    outline: 3px solid #0d6efd;
+    outline-offset: 2px;
+}
+
+/* Reduced motion — acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+}
+
+/* Botões com tamanho mínimo de toque (44px) — acessibilidade */
+.btn { min-height: 44px; min-width: 44px; }
+
+/* Cards */
+.card { margin-bottom: 16px; }
+.card img { height: 180px; object-fit: cover; width: 100%; }
+.sem-foto {
+    height: 180px;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+}
+
+/* Foto preview */
+.foto-preview {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+.foto-remove-btn {
+    position: absolute;
+    top: 4px; right: 4px;
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 26px; height: 26px;
+    cursor: pointer;
+}
+
+/* Paginação */
+.page-link { min-height: 44px; min-width: 44px; display: flex; align-items: center; justify-content: center; }
